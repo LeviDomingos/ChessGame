@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Chess Game By EdenTech</title>
+        <link rel="stylesheet" href="./static/css/styleSheet.css">
+    </head>
+
+    <body>
+        <header> 
+            <div class="dots red-dot"></div>
+            <div class="dots yellow-dot"></div>
+            <h1>Welcome to Chess Game</h1>
+            <div class="dots yellow-dot"></div>
+            <div class="dots red-dot"></div>
+        </header>
+
+        <nav>
+            <div class="nav-menu">
+                <ul>
+                    <li>
+                        <a id="home" href="#">Home</a>
+                        <div class="dropMenu subMenu">
+                            <ul>
+                                <li> <a href="#">Load game</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="board-game">
+             <div class="left-side-menu">
+                 <button>Load Game</button>
+                 <div class="load-pieces">Load Pieces</div>
+             </div>
+             
+             <div id ="game" class= "chess-board"> </div>
+
+             <div class = "right-side-menu">
+                <div>Black Pieces
+                    <div id = "blackPieces" class="chess-black-pieces-lost"></div>
+                </div>
+                
+                <div>White Pieces 
+                    <div id = "whitePieces" class="chess-white-pieces-lost"></div>
+                    <div>Total Point:<span id="points"></span></div>
+                </div>
+                
+             </div>
+
+        </main>
+
+        <footer>
+
+        </footer>
+        <script src ="./static/js/script.js"></script>
+    </body>
+</html>
