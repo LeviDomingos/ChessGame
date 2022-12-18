@@ -21,21 +21,65 @@ class Pieces {
         this.bishop = bishop;
         this.king = king;
         this.queen = queen;
-        this.value = [pawn, knight, rook, bishop, king, queen];
+
+        this.createPieceDetails = {
+            "blackEmoji": [9823, 9822, 9820, 9821, 9819, 9818],
+            "blackPieceCode": ["&#9823;", "&#9822;", "&#9820;", "&#9821;", "&#9819;", "&#9818;"],
+            "whiteEmoji": [9817, 9816, 9814, 9815, 9813, 9812],
+            "whitePieceCode": ["&#9817;", "&#9816;", "&#9814;", "&#9815;", "&#9813;", "&#9812;"],
+            "pieceValue":  [10, 30, 50, 30, 90, 100],
+            "blackAndWhiteCode": [9823, 9822, 9820, 9821, 9819, 9818, 9817, 9816, 9814, 9815, 9813, 9812],
+            "blacAndWhiteEmoji": ["&#9823;", "&#9822;", "&#9820;", "&#9821;", "&#9819;", "&#9818;", "&#9817;", "&#9816;", "&#9814;", "&#9815;", "&#9813;", "&#9812;"]
+        }
     }
 
-    getPieceName(name) {
+    displayMovingPiece(name) {
+        for(let x = 0; x < 12; x++) {
+            if(this.createPieceDetails.blackAndWhiteCode[x] === name) {
+                return this.createPieceDetails.blacAndWhiteEmoji[x];
+            }
+        }
+    }
+
+    getBlackPieceName(name) {
         for(let x = 0; x < 6; x++) {
-            if(this.value[x] === name) {
+            if(this.createPieceDetails.blackEmoji[x] === name) {
                 return true;
             }
         }
     }
 
-    getEatenPiece(name) {
+    getBlackEantenPiece(name) {
+        for(let x = 0; x < 6; x++) {
+            if(this.createPieceDetails.blackEmoji[x] === name) {
+                return this.createPieceDetails.blackPieceCode[x];
+            }
+        }
+    }
+
+    getWhitePieceName(name) {
         for(let i = 0; i < 6; i++) {
-            if(this.value[i] === name) {
+            if(this.createPieceDetails.whiteEmoji[i] === name) {
+               return true;
+            }
+        }
+    }
+
+    getWhiteEantenPiece(name) {
+        for(let x = 0; x < 6; x++) {
+            if(this.createPieceDetails.whiteEmoji[x] === name) {
+                return this.createPieceDetails.whitePieceCode[x];
+            }
+        }
+    }
+
+    getPiecePoint(name) {
+        for(let i = 0; i < 6; i++) {
+            if(this.createPieceDetails.blackEmoji[i] === name) {
                return i;
+            }
+            if(this.createPieceDetails.whiteEmoji[i] === name) {
+                return i;
             }
         }
     }
@@ -44,12 +88,11 @@ class Pieces {
 class Players {
 
     constructor() {
-        this.arrayAddUpPoints = [];
-        this.point = [10, 30, 50, 30, 90, 100];
+        this.point = new Pieces();
         this.sum = 0;
     }
     /**this function get the value of the chess eaten */
-    getPiecePointOrValue = (index) => this.sum = this.point[index];
+    getPiecePointOrValue = (index) => this.sum = this.point.createPieceDetails["pieceValue"][index];
     
     getPieceToPlayWith = (color) => color; /**function that gets the color of the peiece that the player chose to play with */
     
@@ -544,10 +587,7 @@ class ChessEmoji extends Players  {
     /** I use this class to compare emoji to make sure */
     constructor() {
         super();
-        this.blackPiecesNanes = new Pieces(9823, 9822, 9820, 9821, 9819, 9818);
-        this.whitePiecesNanes = new Pieces(9817, 9816, 9814, 9815, 9813, 9812);
-        this.blackPieces = ["&#9823;", "&#9822;", "&#9820;", "&#9821;", "&#9819;", "&#9818;"];
-        this.whitePieces = ["&#9817;", "&#9816;", "&#9814;", "&#9815;", "&#9813;", "&#9812;"];
+        this.piecePlaying = new Pieces();
         this.pieceEmoji = [];
     }
 
@@ -562,30 +602,31 @@ class ChessEmoji extends Players  {
     allowToEat(name, playerPieceColor) {
         const squares = document.querySelectorAll("div.squaresForWhitePieces");
 
-        if(this.blackPiecesNanes.getPieceName(name) && playerPieceColor === "white") {
-            squares[this.getEmptySpaceEatenPiece(squares)].innerHTML =  this.blackPieces[this.blackPiecesNanes.getEatenPiece(name)];
-            this.getPiecePointOrValue(this.blackPiecesNanes.getEatenPiece(name)); 
+        if(playerPieceColor === "white" && this.piecePlaying.getBlackPieceName(name)) {
+            squares[this.getEmptySpaceEatenPiece(squares)].innerHTML =  this.piecePlaying.getBlackEantenPiece(name);
+            this.getPiecePointOrValue(this.piecePlaying.getPiecePoint(name)); 
             this.addPlayersPoints();
             return true;
         }
-
-        if(this.whitePiecesNanes.getPieceName(name) && playerPieceColor === "black") {
-            squares[this.getEmptySpaceEatenPiece(squares)].innerHTML =  this.whitePieces[this.whitePiecesNanes.getEatenPiece(name)];
-            this.getPiecePointOrValue(this.whitePiecesNanes.getEatenPiece(name));
+        if(playerPieceColor === "black" && this.piecePlaying.getWhitePieceName(name)) {
+            squares[this.getEmptySpaceEatenPiece(squares)].innerHTML =  this.piecePlaying.getWhiteEantenPiece(name);
+            this.getPiecePointOrValue(this.piecePlaying.getPiecePoint(name));
             this.addPlayersPoints();
             return true;
         }
     }
 
-    playerPieces(name) {
-        if(this.whitePiecesNanes.getPieceName(name)) {
-            return this.whitePieces[this.whitePiecesNanes.getEatenPiece(name)];
-        }  
-        else {
-            if(this.blackPiecesNanes.getPieceName(name)) {
-                return this.blackPieces[this.blackPiecesNanes.getEatenPiece(name)];
-            }  
-        } 
+    playerPieces(name, playerPieceColor) {
+        if(playerPieceColor ==="black" && this.piecePlaying.getBlackPieceName(name)) {
+            return true;
+        }
+        if(playerPieceColor === "white" && this.piecePlaying.getWhitePieceName(name)) {
+            return true;
+        }
+    }
+
+    returnPiecePlaying(name) {
+        return this.piecePlaying.displayMovingPiece(name);
     }
 
     getEmojiSelected = (emoji) => { this.pieceEmoji.push(emoji); }
@@ -593,8 +634,8 @@ class ChessEmoji extends Players  {
 
 class ChessBoardGame {
     constructor() {
-        this.blackPieces = new Pieces("&#9823;", "&#9822;", "&#9820;", "&#9821;", "&#9819;", "&#9818;");
-        this.whitePieces = new Pieces("&#9817;", "&#9816;", "&#9814;", "&#9815;", "&#9813;", "&#9812;");
+        this.blackPieces = new Pieces().createPieceDetails.blackPieceCode;
+        this.whitePieces = new Pieces().createPieceDetails.whitePieceCode;
         this.element = this.element;
         this.increment = 0;
     }
@@ -612,38 +653,39 @@ class ChessBoardGame {
         ]
     };
 
-    loadWhitePieces() {
-        return [
-            [this.blackPieces.rook, this.blackPieces.knight, this.blackPieces.bishop, this.blackPieces.queen,
-            this.blackPieces.king,  this.blackPieces.bishop, this.blackPieces.knight, this.blackPieces.rook],
-            [this.blackPieces.pawn, this.blackPieces.pawn,   this.blackPieces.pawn,   this.blackPieces.pawn, 
-            this.blackPieces.pawn,  this.blackPieces.pawn,   this.blackPieces.pawn,   this.blackPieces.pawn],
-            ["", "", "", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", ""],
-            [this.whitePieces.pawn, this.whitePieces.pawn, this.whitePieces.pawn, this.whitePieces.pawn,
-            this.whitePieces.pawn, this.whitePieces.pawn, this.whitePieces.pawn, this.whitePieces.pawn],
-            [this.whitePieces.rook, this.whitePieces.knight, this.whitePieces.bishop, this.whitePieces.queen,
-            this.whitePieces.king, this.whitePieces.bishop, this.whitePieces.knight, this.whitePieces.rook]
-        ];
-    }  
-    
-    loadBlackPieces() {
-        return [
-            [this.whitePieces.rook, this.whitePieces.knight, this.whitePieces.bishop, this.whitePieces.queen,
-            this.whitePieces.king, this.whitePieces.bishop, this.whitePieces.knight, this.whitePieces.rook],
-            [this.whitePieces.pawn, this.whitePieces.pawn, this.whitePieces.pawn, this.whitePieces.pawn,
-            this.whitePieces.pawn, this.whitePieces.pawn, this.whitePieces.pawn, this.whitePieces.pawn],
-            ["", "", "", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", ""],
-            ["", "", "", "", "", "", "", ""],
-            [this.blackPieces.pawn, this.blackPieces.pawn,   this.blackPieces.pawn,   this.blackPieces.pawn, 
-            this.blackPieces.pawn,  this.blackPieces.pawn,   this.blackPieces.pawn,   this.blackPieces.pawn],
-            [this.blackPieces.rook, this.blackPieces.knight, this.blackPieces.bishop, this.blackPieces.queen,
-            this.blackPieces.king,  this.blackPieces.bishop, this.blackPieces.knight, this.blackPieces.rook],
-        ];
+    loadWhiteOrBlackPieces(selectPieceToPlayWith) {
+        if(selectPieceToPlayWith === "white") {
+            return [
+                [this.blackPieces[2], this.blackPieces[1], this.blackPieces[3], this.blackPieces[5],
+                this.blackPieces[4],  this.blackPieces[3], this.blackPieces[1], this.blackPieces[2]],
+                [this.blackPieces[0], this.blackPieces[0],   this.blackPieces[0],   this.blackPieces[0], 
+                this.blackPieces[0],  this.blackPieces[0],   this.blackPieces[0],   this.blackPieces[0]],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                [this.whitePieces[0], this.whitePieces[0], this.whitePieces[0], this.whitePieces[0],
+                this.whitePieces[0], this.whitePieces[0], this.whitePieces[0], this.whitePieces[0]],
+                [this.whitePieces[2], this.whitePieces[1], this.whitePieces[3], this.whitePieces[5],
+                this.whitePieces[4], this.whitePieces[3], this.whitePieces[1], this.whitePieces[2]]
+            ];
+        }
+        else {
+            return [
+                [this.whitePieces[2], this.whitePieces[1], this.whitePieces[3], this.whitePieces[5],
+                this.whitePieces[4], this.whitePieces[3], this.whitePieces[1], this.whitePieces[2]],
+                [this.whitePieces[0], this.whitePieces[0], this.whitePieces[0], this.whitePieces[0],
+                this.whitePieces[0], this.whitePieces[0], this.whitePieces[0], this.whitePieces[0] ],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                ["", "", "", "", "", "", "", ""],
+                [this.blackPieces[0], this.blackPieces[0], this.blackPieces[0], this.blackPieces[0],
+                this.blackPieces[0], this.blackPieces[0], this.blackPieces[0], this.blackPieces[0]],
+                [this.blackPieces[2], this.blackPieces[1], this.blackPieces[3], this.blackPieces[5],
+                this.blackPieces[4], this.blackPieces[3], this.blackPieces[1], this.blackPieces[2]]
+            ];
+        }
     }
 
     buildBoard(id, className, row, col) {
@@ -663,18 +705,9 @@ class ChessBoardGame {
         for(let x = 0; x < 8; x++) {
             for(let i = 0; i < 8; i++) {
                 number = this.squareIndex();
-                element[number].innerHTML = this.selectPieceToPlayWith(colorToPlayWith)[x][i];
+                element[number].innerHTML = this.loadWhiteOrBlackPieces(colorToPlayWith)[x][i];
                 element[number].style.fontSize ="50px";
             }
-        }
-    }
-
-    selectPieceToPlayWith(blackOrWhite) {
-
-        if(blackOrWhite === "white") {
-            return this.loadWhitePieces();
-        } else {
-            return this.loadBlackPieces();
         }
     }
 
@@ -724,65 +757,28 @@ window.onload = function() {
         }
         else {
             startPlaying.fillArray(cellIndex);
-            if(emoji.pieceEmoji[0] === emoji.blackPiecesNanes.pawn | emoji.pieceEmoji[0] === emoji.whitePiecesNanes.pawn) {
-                if(startPlaying.movePawn(playerPieceColor)) {
-                    squares[startPlaying.arraySavePositions[0]].innerHTML = "";
-                    squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                    squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.playerPieces(emoji.pieceEmoji[0]);
-                    startPlaying.arraySavePositions = [];
-                    emoji.pieceEmoji = [];
-                }
-                else {
-                    squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                    startPlaying.arraySavePositions = [];
-                    emoji.pieceEmoji = [];
-                }
-
-            }  
-            if(emoji.pieceEmoji[0] === emoji.blackPiecesNanes.knight | emoji.pieceEmoji[0] === emoji.whitePiecesNanes.knight)  {
-                if(startPlaying.moveKnightPiece(playerPieceColor)) {
-                    squares[startPlaying.arraySavePositions[0]].innerHTML = "";
-                    squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                    squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.playerPieces(emoji.pieceEmoji[0]);
-                    startPlaying.arraySavePositions = [];
-                    emoji.pieceEmoji = [];
-                }
-                else {
-                    squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                    startPlaying.arraySavePositions = [];
-                    emoji.pieceEmoji = [];
-                }
-            }
-                
-            if(emoji.pieceEmoji[0] === emoji.blackPiecesNanes.king | emoji.pieceEmoji[0] === emoji.whitePiecesNanes.king) {
-                if(startPlaying.moveKingPiece(playerPieceColor)) {
-                    squares[startPlaying.arraySavePositions[0]].innerHTML = "";
-                    squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                    squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.playerPieces(emoji.pieceEmoji[0]);
-                    startPlaying.arraySavePositions = [];
-                    emoji.pieceEmoji = [];
-                }
-                else {
-                    squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                    startPlaying.arraySavePositions = [];
-                    emoji.pieceEmoji = [];
-                }
-            }
-            if(emoji.pieceEmoji[0] === emoji.blackPiecesNanes.rook | emoji.pieceEmoji[0] === emoji.whitePiecesNanes.rook) {
-                if(startPlaying.moveRookOrQueenForwardAndBack(playerPieceColor)) {
-                    squares[startPlaying.arraySavePositions[0]].innerHTML = "";
-                    squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                    squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.playerPieces(emoji.pieceEmoji[0]);
-                    startPlaying.arraySavePositions = [];
-                    emoji.pieceEmoji = [];
-                }
-                else {
-                    if(startPlaying.moveRookOrQueenLeftAndRight(playerPieceColor)) {
+            if(emoji.playerPieces(emoji.pieceEmoji[0], playerPieceColor)) {
+                if(emoji.pieceEmoji[0] === emoji.piecePlaying.createPieceDetails.blackEmoji[0] | emoji.pieceEmoji[0] === emoji.piecePlaying.createPieceDetails.whiteEmoji[0]) {
+                    if(startPlaying.movePawn(playerPieceColor)) {
                         squares[startPlaying.arraySavePositions[0]].innerHTML = "";
                         squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                        squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.playerPieces(emoji.pieceEmoji[0]);
+                        squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.returnPiecePlaying(emoji.pieceEmoji[0]);
                         startPlaying.arraySavePositions = [];
-                        emoji.pieceEmoji =[];
+                        emoji.pieceEmoji = [];
+                    }
+                    else {
+                        squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
+                        startPlaying.arraySavePositions = [];
+                        emoji.pieceEmoji = [];
+                    }
+                }  
+                if(emoji.pieceEmoji[0] === emoji.piecePlaying.createPieceDetails.blackEmoji[1] | emoji.pieceEmoji[0] === emoji.piecePlaying.createPieceDetails.whiteEmoji[1]) {
+                    if(startPlaying.moveKnightPiece(playerPieceColor)) {
+                        squares[startPlaying.arraySavePositions[0]].innerHTML = "";
+                        squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
+                        squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.returnPiecePlaying(emoji.pieceEmoji[0]);
+                        startPlaying.arraySavePositions = [];
+                        emoji.pieceEmoji = [];
                     }
                     else {
                         squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
@@ -790,55 +786,97 @@ window.onload = function() {
                         emoji.pieceEmoji = [];
                     }
                 }
-            }
-            
-            if(emoji.pieceEmoji[0] === emoji.blackPiecesNanes.queen | emoji.pieceEmoji[0] === emoji.whitePiecesNanes.queen) {
-                if(startPlaying.moveRookOrQueenForwardAndBack(playerPieceColor)) {
-                    squares[startPlaying.arraySavePositions[0]].innerHTML = "";
-                    squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                    squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.playerPieces(emoji.pieceEmoji[0]);
-                    startPlaying.arraySavePositions = [];
-                    emoji.pieceEmoji =[];
-                }
-                else {
-                    if(startPlaying.moveRookOrQueenLeftAndRight(playerPieceColor)) {
+                    
+                if(emoji.pieceEmoji[0] === emoji.piecePlaying.createPieceDetails.blackEmoji[4] | emoji.pieceEmoji[0] === emoji.piecePlaying.createPieceDetails.whiteEmoji[4]) {
+                    if(startPlaying.moveKingPiece(playerPieceColor)) {
                         squares[startPlaying.arraySavePositions[0]].innerHTML = "";
                         squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                        squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.playerPieces(emoji.pieceEmoji[0]);
+                        squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.returnPiecePlaying(emoji.pieceEmoji[0]);
                         startPlaying.arraySavePositions = [];
                         emoji.pieceEmoji = [];
                     }
                     else {
-                        if(startPlaying.moveBishopAndQueenDiagonally(playerPieceColor)) {
+                        squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
+                        startPlaying.arraySavePositions = [];
+                        emoji.pieceEmoji = [];
+                    }
+                }
+                if(emoji.pieceEmoji[0] === emoji.piecePlaying.createPieceDetails.blackEmoji[2] | emoji.pieceEmoji[0] === emoji.piecePlaying.createPieceDetails.whiteEmoji[2]) {
+                    if(startPlaying.moveRookOrQueenForwardAndBack(playerPieceColor)) {
+                        squares[startPlaying.arraySavePositions[0]].innerHTML = "";
+                        squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
+                        squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.returnPiecePlaying(emoji.pieceEmoji[0]);
+                        startPlaying.arraySavePositions = [];
+                        emoji.pieceEmoji = [];
+                    }
+                    else {
+                        if(startPlaying.moveRookOrQueenLeftAndRight(playerPieceColor)) {
                             squares[startPlaying.arraySavePositions[0]].innerHTML = "";
                             squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                            squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.playerPieces(emoji.pieceEmoji[0]);
+                            squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.returnPiecePlaying(emoji.pieceEmoji[0]);
                             startPlaying.arraySavePositions = [];
-                            emoji.pieceEmoji = [];
+                            emoji.pieceEmoji =[];
                         }
                         else {
                             squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
                             startPlaying.arraySavePositions = [];
-                            emoji.pieceEmoji = []; 
+                            emoji.pieceEmoji = [];
                         }
                     }
                 }
+                            
+                if(emoji.pieceEmoji[0] === emoji.piecePlaying.createPieceDetails.blackEmoji[5] | emoji.pieceEmoji[0] === emoji.piecePlaying.createPieceDetails.whiteEmoji[5]) {
+                    if(startPlaying.moveRookOrQueenForwardAndBack(playerPieceColor)) {
+                        squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
+                        squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.returnPiecePlaying(emoji.pieceEmoji[0]);
+                        squares[startPlaying.arraySavePositions[0]].innerHTML = "";
+                        startPlaying.arraySavePositions = [];
+                        emoji.pieceEmoji =[];
+                    }
+                    else {
+                        if(startPlaying.moveRookOrQueenLeftAndRight(playerPieceColor)) {
+                            squares[startPlaying.arraySavePositions[0]].innerHTML = "";
+                            squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
+                            squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.returnPiecePlaying(emoji.pieceEmoji[0]);
+                            startPlaying.arraySavePositions = [];
+                            emoji.pieceEmoji = [];
+                        }
+                        else {
+                            if(startPlaying.moveBishopAndQueenDiagonally(playerPieceColor)) {
+                                squares[startPlaying.arraySavePositions[0]].innerHTML = "";
+                                squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
+                                squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.returnPiecePlaying(emoji.pieceEmoji[0]);
+                                startPlaying.arraySavePositions = [];
+                                emoji.pieceEmoji = [];
+                            }
+                            else {
+                                squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
+                                startPlaying.arraySavePositions = [];
+                                emoji.pieceEmoji = []; 
+                            }
+                        }
+                    }
+                }
+                if(emoji.pieceEmoji[0] === emoji.piecePlaying.createPieceDetails.blackEmoji[3] | emoji.pieceEmoji[0] === emoji.piecePlaying.createPieceDetails.whiteEmoji[3]) {
+                    if(startPlaying.moveBishopAndQueenDiagonally(playerPieceColor)) {
+                        squares[startPlaying.arraySavePositions[0]].innerHTML = "";
+                        squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
+                        squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.returnPiecePlaying(emoji.pieceEmoji[0]);
+                        startPlaying.arraySavePositions = [];
+                        emoji.pieceEmoji = [];
+                    }
+                    else {
+                        squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
+                        startPlaying.arraySavePositions = [];
+                        emoji.pieceEmoji = [];
+                    }
+                } 
+
+            } else { 
+                squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
+                startPlaying.arraySavePositions = [];
+                emoji.pieceEmoji = [];
             }
-        
-            if(emoji.pieceEmoji[0] === emoji.blackPiecesNanes.bishop | emoji.pieceEmoji[0] === emoji.whitePiecesNanes.bishop) {
-                if(startPlaying.moveBishopAndQueenDiagonally(playerPieceColor)) {
-                    squares[startPlaying.arraySavePositions[0]].innerHTML = "";
-                    squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                    squares[startPlaying.arraySavePositions[1]].innerHTML = emoji.playerPieces(emoji.pieceEmoji[0]);
-                    startPlaying.arraySavePositions = [];
-                    emoji.pieceEmoji = [];
-                }
-                else {
-                    squares[startPlaying.arraySavePositions[0]].style.backgroundColor = saveColor;
-                    startPlaying.arraySavePositions = [];
-                    emoji.pieceEmoji = [];
-                }
-            } 
         }
     }
 
@@ -854,5 +892,4 @@ window.onload = function() {
         const squares = document.querySelectorAll("div.squares");  
         chessBoard.loadPiecesTotheBoard(squares, playerPieceColor, 0); 
     }
-
 }
