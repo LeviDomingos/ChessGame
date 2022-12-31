@@ -17,44 +17,62 @@
 
         <nav>
             <div class="nav-menu">
-                <ul>
-                    <li>
-                        <a id="home" href="#">Home</a>
-                        <div class="dropMenu subMenu">
-                            <ul>
-                                <li> <a href="#">Load game</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
+                <div> 
+                    <ul>
+                        <li>
+                            <a id="home" href="#">Home</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4> </h4>
+                </div>
             </div>
         </nav>
 
         <main class="board-game">
-             <div class="left-side-menu">
-                 <button>Load Game</button>
-                 <div class="load-pieces">Load Pieces</div>
-             </div>
-             
-             <div id ="game" class= "chess-board"> </div>
+            <div class="left-side-menu">
+                <!-- <div>
+                    <button>Load Game</button>
+                </div>
+                -->
+                <div> 
+                    <fieldset> 
+                        <legend>Select Piece To Play With</legend>
+                        <div>
+                            <input type="radio" id="whitePiece" name="chess" value="white" unchecked>
+                            <label for="whitePiece">White Piece</label>
+                        </div>
+                        <br>
+                        <div>
+                            <input type="radio" id="blackPiece" name="chess" value="white" unchecked>
+                            <label for="blackPiece">Black Piece</label>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
 
-             <div class = "right-side-menu">
-                <div>Black Pieces
-                    <div id = "blackPieces" class="chess-black-pieces-lost"></div>
+            <div id ="game" class= ""> </div>
+            
+            <div class = "right-side-menu">
+                <div id ="firstPiece" class= "">
+                    
                 </div>
                 
-                <div>White Pieces 
-                    <div id = "whitePieces" class="chess-white-pieces-lost"></div>
-                    <div>Total Point:<span id="points"></span></div>
+                <div id ="secondPiece" class =""> 
                 </div>
+               
+                <div class="pointclass">Total Point:<span id="points" ></span></div>
                 
-             </div>
+            </div>
 
         </main>
 
         <footer>
 
         </footer>
-        <script src ="./static/js/script.js"></script>
+        <script type="module" src= "script.js"></script>
+
     </body>
 </html>
