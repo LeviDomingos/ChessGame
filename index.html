@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Chess Game By EdenTech</title>
+        <link rel="stylesheet" href="./static/css/styleSheet.css">
+    </head>
+
+    <body>
+        <header> 
+            <div class="dots red-dot"></div>
+            <div class="dots yellow-dot"></div>
+            <h1>Welcome to Chess Game</h1>
+            <div class="dots yellow-dot"></div>
+            <div class="dots red-dot"></div>
+        </header>
+
+        <nav>
+            <div class = "nav-menu">
+                <div></div>
+                <div>
+                    <h4> </h4>
+                </div>
+            </div>
+        </nav>
+
+        <main class="board-game">
+            <div class= "left-side-menu">
+                <div class="dropdown">
+                    <button class="dropbtn">Home</button>
+                    <div class="dropdown-content"> 
+                        <span class = "dropbtn"> Select Piece To Play With:</span>
+                      <a href="#">
+                        <input type="radio" id="whitePiece" name="chess" value="white" unchecked>
+                        <label for="whitePiece">White Piece</label>
+                      </a>
+                      <a href="#">
+                        <input type="radio" id="blackPiece" name="chess" value="white" unchecked>
+                        <label for="blackPiece">Black Piece</label>
+                      </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id ="game" class= ""> </div>
+            
+            <div class = "right-side-menu">
+                <div id ="firstPiece" class= "">
+                    
+                </div>
+                
+                <div id ="secondPiece" class =""> 
+                </div>
+               
+                <div class="pointclass">Total Point:<span id="points" ></span></div>
+                
+            </div>
+
+        </main>
+
+        <footer>
+
+        </footer>
+        <script type="module" src= "script.js"></script>
+
+    </body>
+</html>
