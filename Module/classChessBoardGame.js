@@ -1,4 +1,4 @@
- import { Pieces } from "../Module/classPieces.js";
+ import { Pieces } from "../classPieces.js";
 
 class ChessBoardGame {
     constructor() {
