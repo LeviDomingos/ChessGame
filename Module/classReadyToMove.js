@@ -1,5 +1,5 @@
-import { ChessEmoji } from "../Module/classChessEmoji.js";
-import { Position } from "../Module/classPiecePosition.js";
+import { ChessEmoji } from "../classChessEmoji.js";
+import { Position } from "../classPiecePosition.js";
 
 class ReadyToMove {
     constructor() {
