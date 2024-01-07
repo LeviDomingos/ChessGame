@@ -1,5 +1,5 @@
-import { Pieces } from "../Module/classPieces.js";
-import { Players } from "../Module/classPlayers.js";
+import { Pieces } from "../classPieces.js";
+import { Players } from "../classPlayers.js";
 
 class ChessEmoji {
     /** I use this class to compare emoji to make sure */
